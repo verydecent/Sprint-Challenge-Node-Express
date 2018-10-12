@@ -41,7 +41,7 @@ server.get('/list/:id', (req, res) => {
 
 //// post ////
 server.post('/list/', (req, res) => {
-    const body = req.body;
+    const { body } = req;
     const newProject = body;
     console.log(newProject)
     projectMod
@@ -55,8 +55,39 @@ server.post('/list/', (req, res) => {
             .catch(err => res.status(400).json({  error: "There was an error inserting to the API" }))
 })
 //// update ////
+server.put('/list/:id', (req, res) => {
+    // grabbing id and request body as arguments for persist handlers
+    const { id } = req.params;
+    const { body } = req;
+    projectMod
+        .get(id)
+            .then(project => {
+                (!project) ?
+                res.status(400).json({ error: `The ID, ${id} does not exhist` }) :
+                projectMod
+                    .update(id, body)
+                        .then(resource => {
+                            res.status(200).json(resource)
+                        })
+            })
+            .catch(err => res.status(500).json({ error: "There was an error in the request"}))
+
+        // .update(id, body)
+        //     .then(resource =>{
+        //         projectMod
+        //             .get(id)
+        //                 .then(project =>{
+        //                     (!project) ?
+        //                     res.status(400).json({ error: `The ID ${resource.id} does not exhist` }) :
+        //                     null
+        //                 })
+        //         res.status(200).json(resource)
+        //     })
+        //     .catch(err => res.status(500).json({ error: "There was an error in the request"}))
+})
 
 //// delete ////
+
 
 
 const port = 4444;
