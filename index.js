@@ -3,6 +3,10 @@ const server = express();
 const actionMod = require('./data/helpers/actionModel');
 const projectMod = require('./data/helpers/projectModel');
 
+//// middlware ////
+const resourceObject = (req, res, next) => {
+
+}
 server.use(express.json());
 
 //// test ////
@@ -12,7 +16,7 @@ server.get('/', (req, res) => {
 
 //// get ////
 server.get('/list', (req, res) => {
-    actionMod
+    projectMod
         .get()
             .then(projects => (
                 res.json(projects)
@@ -24,7 +28,7 @@ server.get('/list', (req, res) => {
 //// get id ////
 server.get('/list/:id', (req, res) => {
     const { id } = req.params;
-    actionMod
+    projectMod
         .get(id)
             .then(project => {
                 res.status(200).json(project)
@@ -33,9 +37,18 @@ server.get('/list/:id', (req, res) => {
                 res.status(500).json({ error: "There was an error in the request"})
             ))
 })
+//// get project actions ////
 
 //// post ////
-
+server.post('/list/', (req, res) => {
+    const body = req.body;
+    const newProject = body;
+    console.log(newProject)
+    projectMod
+        .insert(newProject)
+            .then(resource => res.status(200).json(resource))
+            .catch(err => res.status(400).json({  error: "There was an error inserting to the API" }))
+})
 //// update ////
 
 //// delete ////
