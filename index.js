@@ -46,7 +46,12 @@ server.post('/list/', (req, res) => {
     console.log(newProject)
     projectMod
         .insert(newProject)
-            .then(resource => res.status(200).json(resource))
+            .then(resource => {
+                (!resource) ?
+                res.status(400).json({ error: "Needed keys are missing in request's body... Please add them"}) :
+                // goes to falsey statement, but skips the truthy statement even if body is missing a property...
+                res.status(200).json(resource)
+            })
             .catch(err => res.status(400).json({  error: "There was an error inserting to the API" }))
 })
 //// update ////
