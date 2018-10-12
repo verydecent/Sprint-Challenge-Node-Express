@@ -97,7 +97,15 @@ server.delete('/projects/:id', (req, res) => {
             .catch(err => res.status(400).json({ error: "There was an error in removing requested Resource"}))
 })
 //// get project actions ////
-server.get('/projects/:id/actions')
+server.get('/projects/:id/actions', (req, res) => {
+    const { id } = req.params;
+    projectMod
+        .getProjectActions(id)
+            .then(actions => {
+                res.status(200).json(actions);
+            })
+            .catch(err => res.status(400).json({ error: 'there was an error with the reqest' }))
+})
 
 const port = 4444;
 server.listen(port, console.log(`\n ====== Port ${port} Online ====== \n`))
