@@ -87,7 +87,16 @@ server.put('/list/:id', (req, res) => {
 })
 
 //// delete ////
-
+server.delete('/list/:id', (req, res) => {
+    // grab id
+    const { id } = req.params;
+    projectMod
+        .remove(id)
+            .then(amountDeleted => (
+                res.status(200).json({ message: `${amountDeleted} resouce(s) were removed from the API`})
+            ))
+            .catch(err => res.status(400).json({ error: "There was an error in removing requested Resource"}))
+})
 
 
 const port = 4444;
