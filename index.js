@@ -15,7 +15,7 @@ server.get('/', (req, res) => {
 })
 
 //// get ////
-server.get('/list', (req, res) => {
+server.get('/projects', (req, res) => {
     projectMod
         .get()
             .then(projects => (
@@ -26,7 +26,7 @@ server.get('/list', (req, res) => {
             ))
 })
 //// get id ////
-server.get('/list/:id', (req, res) => {
+server.get('/projects/:id', (req, res) => {
     const { id } = req.params;
     projectMod
         .get(id)
@@ -37,10 +37,8 @@ server.get('/list/:id', (req, res) => {
                 res.status(500).json({ error: "There was an error in the request"})
             ))
 })
-//// get project actions ////
-
 //// post ////
-server.post('/list/', (req, res) => {
+server.post('/projects/', (req, res) => {
     const { body } = req;
     const newProject = body;
     console.log(newProject)
@@ -55,7 +53,7 @@ server.post('/list/', (req, res) => {
             .catch(err => res.status(400).json({  error: "There was an error inserting to the API" }))
 })
 //// update ////
-server.put('/list/:id', (req, res) => {
+server.put('/projects/:id', (req, res) => {
     // grabbing id and request body as arguments for persist handlers
     const { id } = req.params;
     const { body } = req;
@@ -87,17 +85,19 @@ server.put('/list/:id', (req, res) => {
 })
 
 //// delete ////
-server.delete('/list/:id', (req, res) => {
+server.delete('/projects/:id', (req, res) => {
     // grab id
     const { id } = req.params;
     projectMod
         .remove(id)
             .then(amountDeleted => (
+                // originally had parameters as res, and response failed, but had to change to different name than res
                 res.status(200).json({ message: `${amountDeleted} resouce(s) were removed from the API`})
             ))
             .catch(err => res.status(400).json({ error: "There was an error in removing requested Resource"}))
 })
-
+//// get project actions ////
+server.get('/projects/:id/actions')
 
 const port = 4444;
 server.listen(port, console.log(`\n ====== Port ${port} Online ====== \n`))
