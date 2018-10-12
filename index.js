@@ -21,8 +21,18 @@ server.get('/list', (req, res) => {
                 res.status(500).json({ error: "Resources could not be found" })
             ))
 })
-
 //// get id ////
+server.get('/list/:id', (req, res) => {
+    const { id } = req.params;
+    actionMod
+        .get(id)
+            .then(project => {
+                res.status(200).json(project)
+            })
+            .catch(err => (
+                res.status(500).json({ error: "There was an error in the request"})
+            ))
+})
 
 //// post ////
 
